@@ -5,7 +5,7 @@ description: "Kich hoat khi user muon viet skill moi, tao skill, lam skill cho A
 
 # Nova Skill Creator — Skill Engineer Protocol v2.2
 
-> **Version 2.3.0** · Pattern: Sequential Workflow · Type: Code Scaffolding & Templates
+> **Version 2.3.1** · Pattern: Sequential Workflow · Type: Code Scaffolding & Templates
 
 ## Mục đích
 
@@ -138,9 +138,11 @@ Mẫu cho đích Agent Skills:
 ```yaml
 ---
 name: skill-name-kebab-case
-description: [Mo ta toi uu activation, MOT dong, >= 40 ky tu, khong dau tieng Viet, khong dau goc nhon]
+description: "[Mo ta toi uu activation, MOT dong, >= 40 ky tu, khong dau tieng Viet, khong dau goc nhon]"
 ---
 ```
+
+**Luôn bọc `description` một dòng trong ngoặc kép.** Claude Code và Codex đọc frontmatter bằng parser YAML thật. Với giá trị trần, có hai kiểu hỏng. (1) **Lỗi parse** — skill nạp với metadata rỗng mà không báo: có `: ` ở giữa (ví dụ `Vi du: …`), có `:` ở cuối, mở đầu bằng `[` `{` `>` `|` `'` `"` `*` `!` `%` `@` `,` hoặc backtick, hay mở đầu bằng `- ` `? ` `: ` (ký tự kèm khoảng trắng). (2) **Đổi nghĩa âm thầm** — parse được nhưng sai: mở đầu bằng `#` làm description thành rỗng, ` #` ở giữa cắt cụt phần sau, mở đầu bằng `&` thành anchor. Bọc ngoặc kép tránh được cả hai; trong ngoặc kép không dùng `"` hay `\`.
 
 Các registry có validate chặt thường chặn thêm: path tuyệt đối có chữ ổ đĩa Windows (dạng ổ + hai chấm + gạch chéo — viết `<root>/…` thay vì ghi cứng ổ), chuỗi giống credential, link markdown gãy trong package, và mọi script `.py` phải ép stdout/stderr sang UTF-8. Review độc lập thường còn bác cú pháp chỉ chạy trong sandbox claude.ai (`/mnt/skills/…`, `/mnt/user-data/outputs/`, `present_files`, `extract-text`) — viết hướng dẫn trung tính theo host.
 
@@ -258,6 +260,7 @@ chi hoi kien thuc hoac yeu cau tao noi dung moi khong co y dinh luu.
 10. **Skill quá đơn giản (1 bước) sẽ không kích hoạt** — Claude tự xử lý task 1 bước. Chỉ đóng gói workflow nhiều bước / chuyên biệt.
 11. **Patch chắp vá là nguồn lỗi tích luỹ** — luôn rewrite full khi có từ 2 vấn đề trở lên (nhưng rewrite phải bảo toàn nội dung, xem gotcha #1).
 12. **Frontmatter 5 trường bị đích Agent Skills từ chối** (12/09/2026): ba skill viết theo mẫu 5 trường nộp vào một skill registry validate chặt đều trượt validate vì `version`/`pattern`/`type` và `description` folded `>-` — phải rút về 2 trường một dòng trước khi nộp (xem "Biến thể theo MÔI TRƯỜNG ĐÍCH"). Gotcha #2 (folded `>-`) chỉ đúng cho đích 5 trường; ở đích 2 trường, `>-` là lỗi.
+13. **`description` một dòng không bọc ngoặc kép làm YAML hỏng** (17/11/2026): ba skill (kể cả skill này) có `Vi du: …` trong description trần — `: ` là cú pháp mapping nên parser YAML từ chối; theo tài liệu `claude plugin validate`, skill khi đó nạp với metadata rỗng. `claude plugin validate` bắt được khi đóng gói plugin. Mặc định bọc `description` trong ngoặc kép (xem mẫu ở "Biến thể theo MÔI TRƯỜNG ĐÍCH").
 
 ---
 
@@ -275,4 +278,4 @@ chi hoi kien thuc hoac yeu cau tao noi dung moi khong co y dinh luu.
 
 ---
 
-**Phiên bản:** v2.3.0 — 12/09/2026: thêm mục "Biến thể theo MÔI TRƯỜNG ĐÍCH" (đích Agent Skills chỉ nhận 2 trường name + description một dòng; gate chặn path ổ đĩa, credential, link gãy, script không UTF-8; review bác cú pháp sandbox claude.ai) + gotcha #12; sửa dòng cấu trúc skill. v2.2.1 — chỉ đổi đóng gói. v2.2.0 — Thêm Quy tắc tối thượng "Bảo toàn nội dung khi rewrite" (restructure khác compress, quy trình 3 bước chống nén kiểm kê/ràng buộc/diff), checklist #14 Diff Check, gotcha #1 về LLM nén/cắt xén, bổ sung loại lỗi Content-loss.
+**Phiên bản:** v2.3.1 — 17/11/2026: bọc description của chính skill trong ngoặc kép (bản trần có `Vi du: …` là YAML hỏng); mẫu frontmatter 2 trường bọc ngoặc kép kèm luật scalar YAML; gotcha #13. v2.3.0 — 12/09/2026: thêm mục "Biến thể theo MÔI TRƯỜNG ĐÍCH" (đích Agent Skills chỉ nhận 2 trường name + description một dòng; gate chặn path ổ đĩa, credential, link gãy, script không UTF-8; review bác cú pháp sandbox claude.ai) + gotcha #12; sửa dòng cấu trúc skill. v2.2.1 — chỉ đổi đóng gói. v2.2.0 — Thêm Quy tắc tối thượng "Bảo toàn nội dung khi rewrite" (restructure khác compress, quy trình 3 bước chống nén kiểm kê/ràng buộc/diff), checklist #14 Diff Check, gotcha #1 về LLM nén/cắt xén, bổ sung loại lỗi Content-loss.

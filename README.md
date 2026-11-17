@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-2.3.0-blue)](#version-history)
+[![Version](https://img.shields.io/badge/version-2.3.1-blue)](#version-history)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/chuong1224/nova-skill-creator)](https://github.com/chuong1224/nova-skill-creator/commits)
 [![Stars](https://img.shields.io/github/stars/chuong1224/nova-skill-creator?style=social)](https://github.com/chuong1224/nova-skill-creator/stargazers)
@@ -103,6 +103,7 @@ MIT — xem [LICENSE](LICENSE).
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.3.1 | 2026-11-17 | Template now wraps the one-line `description` in double quotes and explains which bare values break YAML (parse error vs. silent change of meaning); new gotcha #13. |
 | 2.3.0 | 2026-09-12 | Add "target environment variants" section (2-field frontmatter for Agent Skills; stricter registry checks) + gotcha #12. First public release on GitHub: 2026-11-17. Packaged as a Claude plugin on 2026-11-17 (`.claude-plugin/plugin.json`, icon, `skills/` layout, Data & privacy section); SKILL.md `description` wrapped in double quotes so its YAML frontmatter parses (the unquoted `Vi du: ...` broke the parser); instructions unchanged. |
 | 2.2.1 | 2026-09-12 | Packaging change only. |
 | 2.2.0 | — | Add "preserve content on rewrite" rule, checklist #14 Diff Check, gotcha #1 on LLM compression. |

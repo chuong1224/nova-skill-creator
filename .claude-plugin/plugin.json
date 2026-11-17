@@ -1,7 +1,7 @@
 {
   "name": "nova-skill-creator",
   "displayName": "Nova Skill Creator",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Skill Engineer Protocol: a meta-skill that turns write, upgrade, edit and review requests for an AI skill into a fixed step-by-step workflow and outputs a deploy-ready SKILL.md. Instructions only, no code, no network calls.",
   "author": {
     "name": "chuong1224",
