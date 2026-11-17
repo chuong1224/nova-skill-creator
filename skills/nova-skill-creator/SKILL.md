@@ -1,6 +1,6 @@
 ---
 name: nova-skill-creator
-description: Kich hoat khi user muon viet skill moi, tao skill, lam skill cho AI, nang cap skill, chinh sua skill, sua skill, review skill, kiem tra skill cho Claude hoac Grok hoac LLM khac. BAT CU KHI NAO user de cap den skill, SKILL.md, SOP cho AI, nhan vien ao, skill engineer. Vi du: viet skill cho viec luu link vao Notion, tao skill phan loai email, nang cap skill nay len version moi, review skill nay co dat chuan khong, sua loi trigger cho skill, lam SKILL.md cho workflow nay. Khong kich hoat khi user chi hoi kien thuc chung skill la gi, hoi ve khai niem AI agent ma khong gan voi thiet ke skill cu the, hoac yeu cau tao noi dung khac khong phai skill file.
+description: "Kich hoat khi user muon viet skill moi, tao skill, lam skill cho AI, nang cap skill, chinh sua skill, sua skill, review skill, kiem tra skill cho Claude hoac Grok hoac LLM khac. BAT CU KHI NAO user de cap den skill, SKILL.md, SOP cho AI, nhan vien ao, skill engineer. Vi du: viet skill cho viec luu link vao Notion, tao skill phan loai email, nang cap skill nay len version moi, review skill nay co dat chuan khong, sua loi trigger cho skill, lam SKILL.md cho workflow nay. Khong kich hoat khi user chi hoi kien thuc chung skill la gi, hoi ve khai niem AI agent ma khong gan voi thiet ke skill cu the, hoac yeu cau tao noi dung khac khong phai skill file."
 ---
 
 # Nova Skill Creator — Skill Engineer Protocol v2.2

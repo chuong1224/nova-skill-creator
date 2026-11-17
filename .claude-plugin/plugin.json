@@ -1,0 +1,16 @@
+{
+  "name": "nova-skill-creator",
+  "displayName": "Nova Skill Creator",
+  "version": "2.3.0",
+  "description": "Skill Engineer Protocol: a meta-skill that turns write, upgrade, edit and review requests for an AI skill into a fixed step-by-step workflow and outputs a deploy-ready SKILL.md. Instructions only, no code, no network calls.",
+  "author": {
+    "name": "chuong1224",
+    "url": "https://github.com/chuong1224"
+  },
+  "homepage": "https://github.com/chuong1224/nova-skill-creator",
+  "repository": "https://github.com/chuong1224/nova-skill-creator",
+  "license": "MIT",
+  "keywords": ["skill", "skill-authoring", "skill-review", "meta-skill", "prompt-engineering", "vietnamese"],
+  "icon": "./assets/icon.png",
+  "supportUrl": "https://github.com/chuong1224/nova-skill-creator/issues"
+}

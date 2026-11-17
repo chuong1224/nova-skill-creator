@@ -2,7 +2,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/chuong1224/nova-skill-creator)](https://github.com/chuong1224/nova-skill-creator/commits)
 [![Stars](https://img.shields.io/github/stars/chuong1224/nova-skill-creator?style=social)](https://github.com/chuong1224/nova-skill-creator/stargazers)
-[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-Claude%20%7C%20Codex%20%7C%20Grok-8A2BE2)](SKILL.md)
+[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-Claude%20%7C%20Codex%20%7C%20Grok-8A2BE2)](skills/nova-skill-creator/SKILL.md)
+
+<img src="assets/icon.png" alt="Nova Skill Creator icon" width="96">
 
 # Nova Skill Creator
 
@@ -20,7 +22,7 @@ The skill text is written in Vietnamese.
 
 ### Features
 
-- **Includes SKILL.md** — one file, ready to drop into a skills folder.
+- **Includes SKILL.md** (`skills/nova-skill-creator/SKILL.md`) — packaged as a Claude plugin, and also usable as a single file in any skills folder.
 - Sequential workflow for 4 request types: new skill · upgrade · edit · review.
 - Frontmatter variants per target environment:
   - 5 fields (`name`, `description`, `version`, `pattern`, `type`) for claude.ai accounts, Grok and other free-form LLMs.
@@ -31,10 +33,11 @@ The skill text is written in Vietnamese.
 
 ### Installation
 
-- **Claude Code:** copy `SKILL.md` to `.claude/skills/nova-skill-creator/SKILL.md` (project) or `~/.claude/skills/nova-skill-creator/SKILL.md` (global).
-- **Codex:** copy `SKILL.md` to `.agents/skills/nova-skill-creator/SKILL.md`.
-- **claude.ai:** zip the `nova-skill-creator` folder and upload it in *Settings → Capabilities → Skills*.
-- **Grok / other LLMs:** paste the content of `SKILL.md` into the custom instructions or project knowledge.
+- **Claude plugin:** this repository is a Claude plugin (`.claude-plugin/plugin.json`). In Claude Code, test it locally with `claude --plugin-dir ./nova-skill-creator`.
+- **Claude Code (single skill):** copy `skills/nova-skill-creator/SKILL.md` to `.claude/skills/nova-skill-creator/SKILL.md` (project) or `~/.claude/skills/nova-skill-creator/SKILL.md` (global).
+- **Codex:** copy `skills/nova-skill-creator/SKILL.md` to `.agents/skills/nova-skill-creator/SKILL.md`.
+- **claude.ai:** zip the `skills/nova-skill-creator` folder and upload it in *Settings → Capabilities → Skills*.
+- **Grok / other LLMs:** paste the content of `skills/nova-skill-creator/SKILL.md` into the custom instructions or project knowledge.
 
 ### Usage
 
@@ -46,6 +49,17 @@ Ask in natural language, for example:
 - "Fix the trigger of this skill."
 
 The agent answers with the opening line *"Đã kích hoạt Skill Engineer Protocol v2.2. Bắt đầu quy trình chuẩn..."* and then runs the workflow.
+
+### Data & privacy
+
+This plugin contains **one skill made of Markdown instructions only**.
+
+- It runs no code: no scripts, no hooks, no MCP servers, no package launchers.
+- It makes no network requests and sends no data to any server, including the author's.
+- It reads no credentials and stores nothing.
+- The skill only guides Claude while Claude writes or reviews a skill inside your own conversation. Whatever Claude does with files in that conversation follows your normal Claude settings and permissions.
+
+Because the plugin talks to no remote server, it has no privacy policy URL.
 
 ### License
 
@@ -69,11 +83,15 @@ Nova Skill Creator là một meta-skill. Khi anh nhờ agent viết mới, nâng
 
 ### Cài đặt
 
-Chép `SKILL.md` vào thư mục skill của agent (`.claude/skills/nova-skill-creator/` hoặc `.agents/skills/nova-skill-creator/`). Với claude.ai, nén folder rồi upload trong phần Skills.
+Repo này là một Claude plugin (`.claude-plugin/plugin.json`). Muốn dùng lẻ, chép `skills/nova-skill-creator/SKILL.md` vào thư mục skill của agent (`.claude/skills/nova-skill-creator/` hoặc `.agents/skills/nova-skill-creator/`). Với claude.ai, nén folder `skills/nova-skill-creator` rồi upload trong phần Skills.
 
 ### Hướng dẫn sử dụng
 
 Nói bằng câu tự nhiên, ví dụ: "viết skill phân loại email", "nâng cấp skill này lên version mới", "review skill này có đạt chuẩn không".
+
+### Dữ liệu & quyền riêng tư
+
+Plugin chỉ có một skill bằng chữ hướng dẫn. Plugin không chạy code, không gọi mạng, không gửi dữ liệu đi đâu, không đọc mật khẩu hay token, không lưu gì.
 
 ### Giấy phép
 
@@ -85,6 +103,6 @@ MIT — xem [LICENSE](LICENSE).
 
 | Version | Date | Changes |
 |---|---|---|
-| 2.3.0 | 2026-09-12 | Add "target environment variants" section (2-field frontmatter for Agent Skills; stricter registry checks) + gotcha #12. First public release on GitHub: 2026-11-17. |
+| 2.3.0 | 2026-09-12 | Add "target environment variants" section (2-field frontmatter for Agent Skills; stricter registry checks) + gotcha #12. First public release on GitHub: 2026-11-17. Packaged as a Claude plugin on 2026-11-17 (`.claude-plugin/plugin.json`, icon, `skills/` layout, Data & privacy section); SKILL.md `description` wrapped in double quotes so its YAML frontmatter parses (the unquoted `Vi du: ...` broke the parser); instructions unchanged. |
 | 2.2.1 | 2026-09-12 | Packaging change only. |
 | 2.2.0 | — | Add "preserve content on rewrite" rule, checklist #14 Diff Check, gotcha #1 on LLM compression. |
