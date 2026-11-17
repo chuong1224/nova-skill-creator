@@ -1,4 +1,4 @@
-[![Version](https://img.shields.io/badge/version-2.3.1-blue)](#version-history)
+[![Version](https://img.shields.io/badge/version-2.4.0-blue)](#version-history)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/chuong1224/nova-skill-creator)](https://github.com/chuong1224/nova-skill-creator/commits)
 [![Stars](https://img.shields.io/github/stars/chuong1224/nova-skill-creator?style=social)](https://github.com/chuong1224/nova-skill-creator/stargazers)
@@ -18,7 +18,7 @@
 
 Nova Skill Creator is a **Skill Engineer Protocol** for LLM agents. When you ask an agent to create, upgrade, fix or review a skill, this skill makes it follow a fixed, step-by-step process instead of improvising. The output is a self-contained "virtual employee": either a single `SKILL.md` file or a full skill folder, depending on complexity and the target environment.
 
-The skill text is written in Vietnamese.
+The skill is written in English and answers in the language you write in (for example English or Vietnamese).
 
 ### Features
 
@@ -48,7 +48,7 @@ Ask in natural language, for example:
 - "Review this skill — does it meet the standard?"
 - "Fix the trigger of this skill."
 
-The agent answers with the opening line *"Đã kích hoạt Skill Engineer Protocol v2.2. Bắt đầu quy trình chuẩn..."* and then runs the workflow.
+The agent answers with the opening line *"Skill Engineer Protocol v2.2 activated. Starting the standard process..."*, then continues in your language and runs the workflow.
 
 ### Data & privacy
 
@@ -71,7 +71,7 @@ MIT — see [LICENSE](LICENSE).
 
 ### Tổng quan
 
-Nova Skill Creator là một meta-skill. Khi anh nhờ agent viết mới, nâng cấp, sửa hoặc review một skill, skill này buộc agent đi theo một quy trình chuẩn từng bước. Kết quả là một skill tự đứng vững: một file `SKILL.md` hoặc một folder đầy đủ.
+Nova Skill Creator là một meta-skill. Khi bạn nhờ agent viết mới, nâng cấp, sửa hoặc review một skill, skill này buộc agent đi theo một quy trình chuẩn từng bước. Kết quả là một skill tự đứng vững: một file `SKILL.md` hoặc một folder đầy đủ. Skill viết bằng tiếng Anh nhưng trả lời bằng ngôn ngữ bạn dùng, nên hỏi bằng tiếng Việt thì nhận câu trả lời tiếng Việt.
 
 ### Tính năng
 
@@ -103,6 +103,7 @@ MIT — xem [LICENSE](LICENSE).
 
 | Version | Date | Changes |
 |---|---|---|
+| 2.4.0 | 2026-11-17 | English edition: the whole skill is translated to English and the description is in English. Vietnamese-specific rules are generalized (plain ASCII instead of "no Vietnamese diacritics", trigger phrases in every language your users write in). After the activation sentence, the skill now answers in the user's language. |
 | 2.3.1 | 2026-11-17 | Template now wraps the one-line `description` in double quotes and explains which bare values break YAML (parse error vs. silent change of meaning); new gotcha #13. |
 | 2.3.0 | 2026-09-12 | Add "target environment variants" section (2-field frontmatter for Agent Skills; stricter registry checks) + gotcha #12. First public release on GitHub: 2026-11-17. Packaged as a Claude plugin on 2026-11-17 (`.claude-plugin/plugin.json`, icon, `skills/` layout, Data & privacy section); SKILL.md `description` wrapped in double quotes so its YAML frontmatter parses (the unquoted `Vi du: ...` broke the parser); instructions unchanged. |
 | 2.2.1 | 2026-09-12 | Packaging change only. |

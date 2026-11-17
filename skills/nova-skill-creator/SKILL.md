@@ -1,281 +1,285 @@
 ---
 name: nova-skill-creator
-description: "Kich hoat khi user muon viet skill moi, tao skill, lam skill cho AI, nang cap skill, chinh sua skill, sua skill, review skill, kiem tra skill cho Claude hoac Grok hoac LLM khac. BAT CU KHI NAO user de cap den skill, SKILL.md, SOP cho AI, nhan vien ao, skill engineer. Vi du: viet skill cho viec luu link vao Notion, tao skill phan loai email, nang cap skill nay len version moi, review skill nay co dat chuan khong, sua loi trigger cho skill, lam SKILL.md cho workflow nay. Khong kich hoat khi user chi hoi kien thuc chung skill la gi, hoi ve khai niem AI agent ma khong gan voi thiet ke skill cu the, hoac yeu cau tao noi dung khac khong phai skill file."
+description: "Use when the user wants to write a new skill, create a skill, build a skill for an AI agent, upgrade a skill, edit or fix a skill, or review and audit a skill for Claude, Grok or another LLM. WHENEVER the user mentions a skill, SKILL.md, an SOP for AI, a virtual employee or a skill engineer. Examples - write a skill that saves links to Notion, create a skill that sorts emails, upgrade this skill to a new version, review whether this skill meets the standard, fix the trigger of this skill, make a SKILL.md for this workflow. Do not use when the user only asks what a skill is in general, asks about AI agent concepts without designing a specific skill, or asks for other content that is not a skill file."
 ---
 
 # Nova Skill Creator — Skill Engineer Protocol v2.2
 
-> **Version 2.3.1** · Pattern: Sequential Workflow · Type: Code Scaffolding & Templates
+> **Version 2.4.0** · Pattern: Sequential Workflow · Type: Code Scaffolding & Templates
+>
+> "Skill Engineer Protocol v2.2" is the name of the process this skill follows, not the release number.
 
-## Mục đích
+## Purpose
 
-Đây là meta-skill biến mọi yêu cầu liên quan đến skill (viết mới / nâng cấp / chỉnh sửa / review) thành một quy trình kỹ thuật chuẩn, cho ra một skill chuyên nghiệp deploy được ngay. Mỗi skill đầu ra là một "nhân viên ảo" tự đứng vững, có thể là **1 file SKILL.md** hoặc **1 folder đầy đủ** tuỳ độ phức tạp và môi trường đích.
+This meta-skill turns every skill-related request (write new / upgrade / edit / review) into a standard engineering process and produces a professional skill that can be deployed immediately. Each output skill is a self-standing "virtual employee": either **1 SKILL.md file** or **1 full folder**, depending on complexity and the target environment.
 
-Khi skill này kích hoạt, mở đầu phản hồi bằng đúng câu:
-**"Đã kích hoạt Skill Engineer Protocol v2.2. Bắt đầu quy trình chuẩn..."**
+When this skill activates, start the response with exactly this sentence:
+**"Skill Engineer Protocol v2.2 activated. Starting the standard process..."**
+
+After that sentence, respond in the language the user writes in.
 
 ---
 
-## ⚠️ Bảo toàn nội dung khi rewrite (QUY TẮC TỐI THƯỢNG)
+## ⚠️ Preserve content when rewriting (SUPREME RULE)
 
-"Rewrite full" nghĩa là **tái cấu trúc (restructure)**, KHÔNG phải **nén/tóm tắt (compress)**. Khi áp dụng skill này cho LLM khác (đặc biệt model yếu hơn), lỗi phổ biến nhất là mô tả kỹ thuật bị nén, bảng bị cắt cột, schema/giá trị cụ thể bị lược bỏ — output trông gọn hơn nhưng đã mất nội dung nguyên bản.
+"Rewrite full" means **restructure**, NOT **compress/summarize**. When this skill is applied with another LLM (especially a weaker model), the most common failure is that technical descriptions get compressed, table columns get cut, and concrete schemas/values get dropped — the output looks tidier but has lost original content.
 
-**Phân biệt bắt buộc:**
+**Mandatory distinction:**
 
-| Restructure (ĐÚNG) | Compress (SAI) |
+| Restructure (CORRECT) | Compress (WRONG) |
 |---|---|
-| Đổi bố cục, gộp section trùng, sửa câu chữ | Bỏ bớt bảng, dòng, cột, ví dụ |
-| Giữ nguyên mọi giá trị/schema/ID/quy tắc | Diễn giải lại schema thành "đại khái" |
-| Số mục đầu ra >= số mục đầu vào | Rút gọn 10 gotchas còn 4 |
-| Tăng độ rõ ràng | Giảm độ chi tiết để "cho ngắn" |
+| Change layout, merge duplicate sections, fix wording | Drop tables, rows, columns, examples |
+| Keep every value/schema/ID/rule exactly | Paraphrase a schema into "roughly" |
+| Number of output items >= number of input items | Shrink 10 gotchas down to 4 |
+| Increase clarity | Reduce detail "to make it shorter" |
 
-**Quy trình 3 bước chống nén — BẮT BUỘC trước/sau mọi lần rewrite hoặc nâng cấp:**
+**3-step anti-compression process — MANDATORY before/after every rewrite or upgrade:**
 
-1. **Kiểm kê trước (Content Inventory):** liệt kê toàn bộ phần tử nguyên bản KHÔNG được mất — mỗi bảng (kèm số dòng/cột), mỗi quy tắc schema, mỗi giá trị cụ thể (ID, version, option), mỗi gotcha, mỗi test case. Ghi thành danh sách đối chiếu.
-2. **Rewrite có ràng buộc:** khi viết lại, mọi phần tử trong danh sách phải xuất hiện đầy đủ ở output. Được phép cải thiện cách trình bày, KHÔNG được phép giảm số phần tử hay độ chi tiết của từng phần tử.
-3. **Đối chiếu sau (Diff Check):** so output với danh sách kiểm kê. Nếu thiếu bất kỳ phần tử nào hoặc một bảng ít dòng/cột hơn bản gốc → CHƯA ĐẠT, bổ sung lại trước khi trả lời.
+1. **Inventory first (Content Inventory):** list every original element that must NOT be lost — each table (with its row/column count), each schema rule, each concrete value (ID, version, option), each gotcha, each test case. Write it down as a checklist.
+2. **Constrained rewrite:** while rewriting, every element in the list must appear in full in the output. You may improve the presentation; you may NOT reduce the number of elements or the detail of any element.
+3. **Check afterwards (Diff Check):** compare the output with the inventory. If any element is missing, or a table has fewer rows/columns than the original → NOT DONE; restore it before answering.
 
-**Chỉ thị tự ràng buộc cho LLM thực thi:** "Bảo toàn nguyên văn mọi bảng, schema, giá trị cụ thể và gotcha. Không tóm tắt, không lược bỏ chi tiết kỹ thuật. Nếu cần ngắn hơn thì TÁCH sang references/, tuyệt đối không XOÁ nội dung."
+**Self-binding instruction for the executing LLM:** "Preserve verbatim every table, schema, concrete value and gotcha. Do not summarize, do not drop technical detail. If it must be shorter, SPLIT it into references/; never DELETE content."
 
 ---
 
-## Skill là folder — chọn cấu trúc theo độ phức tạp
+## A skill is a folder — choose the structure by complexity
 
-Claude, Claude Code và các agent hỗ trợ skill dạng **folder** với SKILL.md + tài nguyên đi kèm, có cơ chế **Progressive Disclosure** (load tài nguyên theo nhu cầu), chạy được script offline, và load `references/` động. Không bắt buộc nhồi mọi thứ vào 1 file.
+Claude, Claude Code and other agents support skills as a **folder** with SKILL.md + bundled resources, with **Progressive Disclosure** (resources load on demand), offline-runnable scripts, and dynamically loaded `references/`. You do not have to cram everything into 1 file.
 
-| Mức độ | Cấu trúc khuyến nghị |
+| Complexity | Recommended structure |
 |---|---|
-| Skill đơn giản, ngắn | Chỉ 1 file `SKILL.md` (vẫn hợp lệ) |
-| Skill có logic lặp/deterministic | Folder + `scripts/` |
-| Skill nhiều domain / tài liệu dài | Folder + `references/` tách theo variant |
-| Skill xuất file mẫu (template/icon/font) | Folder + `assets/` |
+| Simple, short skill | Just 1 `SKILL.md` file (still valid) |
+| Skill with repetitive/deterministic logic | Folder + `scripts/` |
+| Multi-domain skill / long documentation | Folder + `references/` split by variant |
+| Skill that outputs bundled files (templates/icons/fonts) | Folder + `assets/` |
 
-**Nguyên tắc:** chọn cấu trúc nhỏ nhất đủ dùng. Đơn giản thì 1 file; phức tạp thì tách folder để giữ SKILL.md gọn. **Khi nội dung quá dài → TÁCH sang references/, KHÔNG nén bỏ.**
+**Principle:** choose the smallest structure that is enough. Simple → 1 file; complex → split into a folder to keep SKILL.md lean. **When content is too long → SPLIT it into references/, do NOT compress it away.**
 
 ---
 
-## Anatomy của một Skill
+## Anatomy of a Skill
 
 ```
 skill-name-kebab-case/
-├── SKILL.md          (bắt buộc)
-│   ├── YAML frontmatter (5 trường cho account/LLM tự do · CHỈ name + description cho đích Agent Skills chuẩn — xem 'Biến thể theo MÔI TRƯỜNG ĐÍCH')
+├── SKILL.md          (required)
+│   ├── YAML frontmatter (5 fields for accounts/free-form LLMs · ONLY name + description for standard Agent Skills targets — see 'Variants by TARGET ENVIRONMENT')
 │   └── Markdown instructions
-└── Tài nguyên đi kèm (tuỳ chọn)
-    ├── scripts/      - Code thực thi cho task deterministic/lặp lại
-    ├── references/   - Tài liệu load vào context khi cần
-    └── assets/       - File dùng trong output (template, icon, font)
+└── Bundled resources (optional)
+    ├── scripts/      - Executable code for deterministic/repetitive tasks
+    ├── references/   - Documents loaded into context when needed
+    └── assets/       - Files used in the output (template, icon, font)
 ```
 
-### Progressive Disclosure (3 tầng load)
+### Progressive Disclosure (3 loading levels)
 
-| Tầng | Nội dung | Khi nào vào context |
+| Level | Content | When it enters context |
 |---|---|---|
-| 1 | Metadata (`name` + `description`) | Luôn có (~100 từ) |
-| 2 | Body SKILL.md | Khi skill kích hoạt (lý tưởng dưới 500 dòng) |
-| 3 | Tài nguyên bundled | Khi cần (`references/` load động; `scripts/` chạy không cần load nội dung vào context) |
+| 1 | Metadata (`name` + `description`) | Always (~100 words) |
+| 2 | SKILL.md body | When the skill activates (ideally under 500 lines) |
+| 3 | Bundled resources | When needed (`references/` load dynamically; `scripts/` run without loading their content into context) |
 
-**Quy tắc:** giữ body SKILL.md dưới 500 dòng. Khi sắp chạm giới hạn → **tách** sang `references/` và để pointer rõ ràng trong SKILL.md chỉ chỗ cần đọc. Reference dài (>300 dòng) nên có mục lục. Tách KHÁC với nén — tách giữ nguyên nội dung ở file khác, nén làm mất nội dung.
+**Rule:** keep the SKILL.md body under 500 lines. When you approach the limit → **split** into `references/` and leave a clear pointer in SKILL.md saying where to read. A long reference (>300 lines) should have a table of contents. Splitting is DIFFERENT from compressing — splitting keeps the content intact in another file, compressing loses content.
 
 ---
 
-## Quy trình VIẾT SKILL MỚI (8 bước)
+## WRITE A NEW SKILL process (8 steps)
 
-| # | Bước | Mô tả |
+| # | Step | Description |
 |---|---|---|
-| 1 | Hỏi rõ thông tin thiếu | Mục tiêu, gotchas, ngôn ngữ, output, môi trường đích. Nếu hội thoại đã có sẵn workflow → trích từ lịch sử trước, chỉ hỏi phần còn thiếu |
-| 2 | Chọn 1 Pattern + 1 Loại Skill | Đúng 1 của mỗi loại (xem danh sách bên dưới) |
-| 3 | Viết Description TRƯỚC | Bước quan trọng nhất — tuân thủ Protocol Description ở dưới |
-| 4 | Chọn cấu trúc + thiết kế nội dung | Single-file hay folder? Phần nào inline, phần nào tách `references/`, logic nào thành `scripts/` |
-| 5 | Viết SKILL.md | YAML + Workflow + Rules/Schema + Gotchas; body dưới 500 dòng, offload phần dài sang references |
-| 6 | Viết script/reference (nếu cần) | Logic deterministic/lặp lại → `scripts/`; tài liệu dài → `references/` có pointer |
-| 7 | Test kích hoạt | 3 positive + 3 negative cases |
-| 8 | Trả lời theo Output Format | Xem mục Output Format bên dưới |
+| 1 | Ask for missing information | Goal, gotchas, language, output, target environment. If the conversation already contains the workflow → extract it from the history first, ask only for what is missing |
+| 2 | Choose 1 Pattern + 1 Skill Type | Exactly 1 of each (see the lists below) |
+| 3 | Write the Description FIRST | The most important step — follow the Description Protocol below |
+| 4 | Choose the structure + design the content | Single file or folder? What stays inline, what goes to `references/`, which logic becomes `scripts/` |
+| 5 | Write SKILL.md | YAML + Workflow + Rules/Schema + Gotchas; body under 500 lines, offload long parts to references |
+| 6 | Write scripts/references (if needed) | Deterministic/repetitive logic → `scripts/`; long documentation → `references/` with pointers |
+| 7 | Test activation | 3 positive + 3 negative cases |
+| 8 | Answer using the Output Format | See the Output Format section below |
 
-**CHỈ RELEASE khi đạt đủ 14/14 Checklist.**
-
----
-
-## Quy trình NÂNG CẤP / CHỈNH SỬA (8 bước)
-
-1. Đọc toàn bộ SKILL.md (và các file đi kèm) hiện tại.
-2. **Kiểm kê trước** — liệt kê mọi bảng/schema/giá trị/gotcha/test case KHÔNG được mất (Quy tắc tối thượng, bước 1).
-3. Ghi nhận gotcha từ user và từ lần chạy trước.
-4. Đánh giá theo Checklist 14 tiêu chí.
-5. Xác định loại lỗi: **Under-trigger** / **Over-trigger** / **Execution error** / **Content-loss (nén/cắt xén)**.
-6. **Rewrite toàn bộ có ràng buộc bảo toàn** — restructure, KHÔNG compress. TUYỆT ĐỐI KHÔNG patch từng phần.
-7. **Đối chiếu sau** — diff output với danh sách kiểm kê, bổ sung nếu thiếu.
-8. Test lại 3 positive + 3 negative cases, tăng `version`.
-
-**Nguyên tắc sắt:** Rewrite full = restructure giữ trọn nội dung. Không patch chắp vá. Không nén bỏ chi tiết. Giữ nguyên `name` cũ khi nâng cấp.
+**RELEASE ONLY when all 14/14 Checklist items pass.**
 
 ---
 
-## YAML Frontmatter (BẮT BUỘC)
+## UPGRADE / EDIT process (8 steps)
+
+1. Read the whole current SKILL.md (and its bundled files).
+2. **Inventory first** — list every table/schema/value/gotcha/test case that must NOT be lost (Supreme rule, step 1).
+3. Record gotchas from the user and from previous runs.
+4. Evaluate against the 14-item Checklist.
+5. Identify the failure type: **Under-trigger** / **Over-trigger** / **Execution error** / **Content-loss (compression/truncation)**.
+6. **Rewrite everything under the preservation constraint** — restructure, do NOT compress. NEVER patch piece by piece.
+7. **Check afterwards** — diff the output against the inventory, restore anything missing.
+8. Re-test 3 positive + 3 negative cases, bump `version`.
+
+**Iron rule:** Rewrite full = restructure that keeps all content. No patchwork. No compressing away detail. Keep the old `name` when upgrading.
+
+---
+
+## YAML Frontmatter (MANDATORY)
 
 ```yaml
 ---
 name: skill-name-kebab-case
 version: x.x.x
 description: >-
-  [Mo ta toi uu activation, duoi 1024 ky tu, khong dau tieng Viet, khong dau goc nhon]
-pattern: [1 trong 5 Pattern]
-type: [1 trong 9 Loai Skill]
+  [Description optimized for activation, under 1024 characters, plain ASCII with no diacritics, no angle brackets]
+pattern: [1 of the 5 Patterns]
+type: [1 of the 9 Skill Types]
 ---
 ```
 
-### Biến thể theo MÔI TRƯỜNG ĐÍCH (hỏi trước khi viết frontmatter)
+### Variants by TARGET ENVIRONMENT (ask before writing the frontmatter)
 
-Khối 5 trường ở trên là mẫu cho **account claude.ai / Grok / LLM tự do**. Có đích chỉ nhận đúng 2 trường — nộp bản 5 trường vào đó là **trượt validate ngay**, chưa tới bước review. Bước 1 (thu thập) PHẢI hỏi hoặc suy ra đích; không rõ thì mặc định viết bản 2 trường, vì bản 2 trường chạy được ở mọi đích còn bản 5 trường thì không.
+The 5-field block above is the template for **claude.ai accounts / Grok / free-form LLMs**. Some targets accept exactly 2 fields — submitting the 5-field version there **fails validation immediately**, before review even starts. Step 1 (gathering) MUST ask for or infer the target; if unclear, default to the 2-field version, because the 2-field version works on every target while the 5-field version does not.
 
-| Đích | Frontmatter | Version / Pattern / Type để đâu |
+| Target | Frontmatter | Where Version / Pattern / Type go |
 |---|---|---|
-| Account claude.ai, Grok, LLM khác | 5 trường như mẫu trên, `description` folded `>-` | trong YAML |
-| **Agent Skills chuẩn** (Claude Code `.claude/skills`, Codex `.agents/skills`) và các skill registry có validate chặt | **CHỈ `name` + `description`, mỗi trường MỘT dòng** — không `>-`, không dòng thụt đầu, không trường thứ ba | một dòng blockquote ngay dưới H1: `> **Version x.y.z** · Pattern: … · Type: …`; version thật sống trong file registry/manifest của hệ thống đích (nếu có) |
+| claude.ai account, Grok, other LLMs | 5 fields as in the template above, `description` folded `>-` | in the YAML |
+| **Standard Agent Skills** (Claude Code `.claude/skills`, Codex `.agents/skills`) and skill registries with strict validation | **ONLY `name` + `description`, each on ONE line** — no `>-`, no indented lines, no third field | one blockquote line right under the H1: `> **Version x.y.z** · Pattern: … · Type: …`; the real version lives in the target system's registry/manifest file (if any) |
 
-Mẫu cho đích Agent Skills:
+Template for Agent Skills targets:
 
 ```yaml
 ---
 name: skill-name-kebab-case
-description: "[Mo ta toi uu activation, MOT dong, >= 40 ky tu, khong dau tieng Viet, khong dau goc nhon]"
+description: "[Description optimized for activation, ONE line, >= 40 characters, plain ASCII with no diacritics, no angle brackets]"
 ---
 ```
 
-**Luôn bọc `description` một dòng trong ngoặc kép.** Claude Code và Codex đọc frontmatter bằng parser YAML thật. Với giá trị trần, có hai kiểu hỏng. (1) **Lỗi parse** — skill nạp với metadata rỗng mà không báo: có `: ` ở giữa (ví dụ `Vi du: …`), có `:` ở cuối, mở đầu bằng `[` `{` `>` `|` `'` `"` `*` `!` `%` `@` `,` hoặc backtick, hay mở đầu bằng `- ` `? ` `: ` (ký tự kèm khoảng trắng). (2) **Đổi nghĩa âm thầm** — parse được nhưng sai: mở đầu bằng `#` làm description thành rỗng, ` #` ở giữa cắt cụt phần sau, mở đầu bằng `&` thành anchor. Bọc ngoặc kép tránh được cả hai; trong ngoặc kép không dùng `"` hay `\`.
+**Always wrap a one-line `description` in double quotes.** Claude Code and Codex read the frontmatter with a real YAML parser. With a bare value there are two kinds of breakage. (1) **Parse error** — the skill loads with empty metadata and no warning: a `: ` in the middle (for example `Vi du: …` or `Example: …`), a `:` at the end, starting with `[` `{` `>` `|` `'` `"` `*` `!` `%` `@` `,` or a backtick, or starting with `- ` `? ` `: ` (the character followed by a space). (2) **Silent change of meaning** — it parses but is wrong: starting with `#` makes the description empty, ` #` in the middle cuts off the rest, starting with `&` turns it into an anchor. Double quotes avoid both; inside the double quotes do not use `"` or `\`.
 
-Các registry có validate chặt thường chặn thêm: path tuyệt đối có chữ ổ đĩa Windows (dạng ổ + hai chấm + gạch chéo — viết `<root>/…` thay vì ghi cứng ổ), chuỗi giống credential, link markdown gãy trong package, và mọi script `.py` phải ép stdout/stderr sang UTF-8. Review độc lập thường còn bác cú pháp chỉ chạy trong sandbox claude.ai (`/mnt/skills/…`, `/mnt/user-data/outputs/`, `present_files`, `extract-text`) — viết hướng dẫn trung tính theo host.
+Registries with strict validation often also block: absolute paths containing a Windows drive letter (drive + colon + slash — write `<root>/…` instead of hard-coding a drive), strings that look like credentials, broken markdown links inside the package, and any `.py` script that does not force stdout/stderr to UTF-8. Independent review also often rejects syntax that only works in the claude.ai sandbox (`/mnt/skills/…`, `/mnt/user-data/outputs/`, `present_files`, `extract-text`) — write host-neutral instructions.
 
-### 5 Patterns (chọn đúng 1)
+### 5 Patterns (choose exactly 1)
 
 Sequential Workflow | Multi-MCP Coordination | Iterative Refinement | Context-Aware Tool Selection | Domain-Specific Intelligence
 
-### 9 Loại Skill (chọn đúng 1)
+### 9 Skill Types (choose exactly 1)
 
 Library & API Reference | Product Verification | Code Scaffolding & Templates | Business Process Automation | Data Fetching & Analysis | Code Quality & Review | CI/CD & Deployment | Runbooks | Infrastructure Operations
 
 ---
 
-## Protocol viết Description (BẮT BUỘC)
+## Description writing Protocol (MANDATORY)
 
-**Mục tiêu:** activation rate 72–90%.
+**Goal:** activation rate 72–90%.
 
-| Yêu cầu | Chi tiết |
+| Requirement | Detail |
 |---|---|
-| Trigger phrases | Tối thiểu 5 cụm (cả tiếng Việt + tiếng Anh) |
-| Văn phong | Kiểu tình huống: "Kich hoat khi user muon...", "BAT CU KHI NAO..." |
-| Ví dụ thực tế | Có ít nhất vài prompt mẫu user hay gõ |
-| Độ dài | Dưới 1024 ký tự |
-| Không dấu tiếng Việt | Bỏ toàn bộ ă â ê ô ơ ư đ và mọi dấu thanh (chỉ trong YAML) |
-| Không ký tự góc nhọn | Tuyệt đối không dùng dấu mở/đóng góc nhọn |
-| Negative blocker | Kết bằng câu chặn: "Khong kich hoat khi..." |
+| Trigger phrases | At least 5 phrases (in every language your users write in, romanized if needed, e.g. English + Vietnamese) |
+| Style | Situational: "Use when the user wants...", "WHENEVER..." |
+| Real examples | At least a few sample prompts users actually type |
+| Length | Under 1024 characters |
+| No diacritics | YAML fields only: plain ASCII — strip every accented letter and tone mark (e.g. Vietnamese ă â ê ô ơ ư đ). For languages not written in Latin script, use romanized or English trigger phrases |
+| No angle brackets | Never use opening/closing angle brackets |
+| Negative blocker | End with a blocking sentence: "Do not use when..." |
 
-**Ví dụ Description chuẩn (không dấu):**
+**Example of a standard Description (plain ASCII):**
 
 ```
-Kich hoat khi user muon them noi dung vao AI Wiki tren Notion, luu kien thuc AI,
-phan loai link bai viet, ghi chu, tool, prompt. BAT CU KHI NAO user paste link,
-ghi chu, ten tool, prompt AI can luu lai. Vi du: luu link nay vao wiki, them tool
-nay vao notion, ghi lai prompt nay, save bai viet nay. Khong kich hoat khi user
-chi hoi kien thuc hoac yeu cau tao noi dung moi khong co y dinh luu.
+Use when the user wants to add content to an AI Wiki on Notion, save AI knowledge,
+classify article links, notes, tools, prompts. WHENEVER the user pastes a link,
+a note, a tool name or an AI prompt to keep. Examples - save this link to the wiki,
+add this tool to notion, keep this prompt, save this article. Do not use when the
+user only asks a knowledge question or asks for new content with no intent to save.
 ```
 
 ---
 
-## Checklist 14 tiêu chí (GATE — bắt buộc 14/14)
+## 14-item Checklist (GATE — 14/14 required)
 
-| # | Tiêu chí | Pass khi |
+| # | Criterion | Pass when |
 |---|---|---|
-| 1 | `name` đúng kebab-case, không chứa "claude"/"anthropic" | ☐ |
-| 2 | YAML đủ `name` + `version` + `description` (+ `pattern` + `type`) | ☐ |
-| 3 | `description` đạt đầy đủ Protocol Description | ☐ |
-| 4 | Không có ký tự góc nhọn trong description | ☐ |
-| 5 | Body SKILL.md dưới 500 dòng (phần dài đã offload sang references) | ☐ |
-| 6 | Đã chọn đúng 1 Pattern + 1 Loại Skill | ☐ |
-| 7 | Không dạy kiến thức cơ bản AI đã biết | ☐ |
-| 8 | Có gotchas thực tế (tối thiểu 5) | ☐ |
-| 9 | Cấu trúc đúng nhu cầu: tài liệu dài tách `references/` có pointer rõ ràng | ☐ |
-| 10 | Logic lặp lại/deterministic đóng gói thành `scripts/` thay vì mô tả thủ công | ☐ |
-| 11 | Description tối ưu activation + có negative blocker | ☐ |
-| 12 | Đã test 3 positive + 3 negative cases | ☐ |
-| 13 | Đã rewrite full (không patch) nếu là nâng cấp | ☐ |
-| 14 | **Đã Diff Check: mọi bảng/schema/giá trị/gotcha/test case nguyên bản còn đủ, không bị nén/cắt xén** | ☐ |
+| 1 | `name` is correct kebab-case and does not contain "claude"/"anthropic" | ☐ |
+| 2 | YAML has `name` + `version` + `description` (+ `pattern` + `type`) | ☐ |
+| 3 | `description` fully meets the Description Protocol | ☐ |
+| 4 | No angle brackets in the description | ☐ |
+| 5 | SKILL.md body under 500 lines (long parts offloaded to references) | ☐ |
+| 6 | Exactly 1 Pattern + 1 Skill Type chosen | ☐ |
+| 7 | Does not teach basics the AI already knows | ☐ |
+| 8 | Has real gotchas (at least 5) | ☐ |
+| 9 | Structure fits the need: long documentation split into `references/` with clear pointers | ☐ |
+| 10 | Repetitive/deterministic logic packaged as `scripts/` instead of described by hand | ☐ |
+| 11 | Description optimized for activation + has a negative blocker | ☐ |
+| 12 | Tested 3 positive + 3 negative cases | ☐ |
+| 13 | Rewrote in full (no patching) if this is an upgrade | ☐ |
+| 14 | **Diff Check done: every original table/schema/value/gotcha/test case is still complete, nothing compressed or truncated** | ☐ |
 
-**Chỉ trả lời user khi đủ 14/14.**
-
----
-
-## 6 Nguyên tắc vàng
-
-1. **Không dạy cái AI đã biết** — chỉ tập trung context riêng + gotchas.
-2. **Gotchas là tài sản quý nhất** — ghi lại mọi lỗi lặp lại.
-3. **Cập nhật liên tục** — mỗi lần sai = gotcha mới → nâng cấp ngay.
-4. **Cấu trúc nhỏ nhất đủ dùng** — đơn giản 1 file, phức tạp tách folder và dùng Progressive Disclosure.
-5. **Rewrite full = restructure, không compress** — bảo toàn trọn vẹn nội dung kỹ thuật; dài quá thì tách references, không nén bỏ.
-6. **Không bao giờ patch chắp vá.**
+**Answer the user only when all 14/14 pass.**
 
 ---
 
-## Output Format khi trả lời user (BẮT BUỘC, đúng thứ tự)
+## 6 Golden principles
 
-1. **Tóm tắt Skill** — mục đích, pattern, loại, cấu trúc (single-file hay folder).
-2. **Nội dung SKILL.md đầy đủ** — trong code block; nếu là folder, liệt kê thêm các file `references/` / `scripts/` / `assets/`.
-3. **Hướng dẫn deploy** — các bước cụ thể theo môi trường đích.
-4. **Kết quả Test** — 3 positive + 3 negative cases.
-5. **Diff Check** — xác nhận không mất nội dung nguyên bản (nếu là nâng cấp/rewrite).
-6. **Gotcha đã xử lý** — nếu là nâng cấp.
-7. **Phiên bản** — version trong YAML.
-
----
-
-## Hướng dẫn deploy
-
-**Skill dạng folder (Claude Code / agent / API):**
-1. Tạo folder `skill-name-kebab-case/`.
-2. Đặt `SKILL.md` ở gốc, kèm `scripts/`, `references/`, `assets/` nếu có.
-3. Cài skill theo cơ chế của môi trường (folder skills directory hoặc package `.skill`).
-4. Trigger thử 1 câu positive để xác nhận kích hoạt.
-
-**Skill single-file (UI editor dán trực tiếp):**
-1. Vào Settings → Skills → click `+`.
-2. Đặt tên khớp `name` trong YAML.
-3. Paste toàn bộ SKILL.md → Save.
-4. Trigger thử 1 câu positive.
-
-**Kiểm tra sau khi deploy:** không kích hoạt → soát description (còn dấu tiếng Việt? quá ngắn? thiếu negative blocker?). Script/reference không chạy → kiểm tra đường dẫn tương đối trong folder.
+1. **Do not teach what the AI already knows** — focus only on the specific context + gotchas.
+2. **Gotchas are the most valuable asset** — record every repeated failure.
+3. **Keep updating** — every mistake = a new gotcha → upgrade right away.
+4. **Smallest structure that is enough** — simple = 1 file, complex = split into a folder and use Progressive Disclosure.
+5. **Rewrite full = restructure, not compress** — preserve technical content completely; if it is too long, split into references, do not compress it away.
+6. **Never patch piecemeal.**
 
 ---
 
-## Gotchas (thực tế từ quá trình deploy)
+## Output Format when answering the user (MANDATORY, in this order)
 
-1. **LLM nén/cắt xén khi rewrite** — gotcha nguy hiểm nhất, đặc biệt với model yếu hơn. Khi bảo "rewrite full", model có xu hướng tóm tắt và bỏ bảng/schema/giá trị. Bắt buộc chạy quy trình 3 bước chống nén (kiểm kê → rewrite ràng buộc → diff check) và nhét chỉ thị tự ràng buộc "không tóm tắt, dài quá thì tách references chứ không xoá".
-2. **Multi-line description phải dùng folded scalar** `>-` trong YAML. Thiếu sẽ vỡ YAML hoặc bị cắt description.
-3. **Tuyệt đối không dấu tiếng Việt trong YAML frontmatter** — chỉ riêng các field YAML. Dấu ă â ê ô ơ ư đ và dấu thanh làm hỏng parsing/activation. Body markdown thì dùng tiếng Việt có dấu bình thường.
-4. **Không ký tự góc nhọn trong description** — dễ bị hiểu nhầm là tag và làm hỏng frontmatter.
-5. **Không double-quote chưa escape bên trong chuỗi description** — gây lỗi parse YAML.
-6. **Skill là folder, không bắt buộc 1 file** — đừng nhồi mọi thứ vào SKILL.md. Tài liệu dài tách `references/` (load động), logic lặp lại tách `scripts/` (chạy offline, không tốn context). Chỉ dùng single-file khi skill thực sự ngắn gọn.
-7. **SKILL.md body vẫn nên dưới 500 dòng** dù có folder — giới hạn cho tầng 2 Progressive Disclosure; phần dư offload sang references kèm pointer rõ ràng.
-8. **Pointer tới references phải rõ ràng** — nêu rõ "đọc file X khi gặp tình huống Y", nếu không AI sẽ không biết khi nào load.
-9. **Nâng cấp phải giữ nguyên `name` cũ**, chỉ tăng `version`. Đổi tên `-v2` tạo skill trùng lặp, gây over-trigger.
-10. **Skill quá đơn giản (1 bước) sẽ không kích hoạt** — Claude tự xử lý task 1 bước. Chỉ đóng gói workflow nhiều bước / chuyên biệt.
-11. **Patch chắp vá là nguồn lỗi tích luỹ** — luôn rewrite full khi có từ 2 vấn đề trở lên (nhưng rewrite phải bảo toàn nội dung, xem gotcha #1).
-12. **Frontmatter 5 trường bị đích Agent Skills từ chối** (12/09/2026): ba skill viết theo mẫu 5 trường nộp vào một skill registry validate chặt đều trượt validate vì `version`/`pattern`/`type` và `description` folded `>-` — phải rút về 2 trường một dòng trước khi nộp (xem "Biến thể theo MÔI TRƯỜNG ĐÍCH"). Gotcha #2 (folded `>-`) chỉ đúng cho đích 5 trường; ở đích 2 trường, `>-` là lỗi.
-13. **`description` một dòng không bọc ngoặc kép làm YAML hỏng** (17/11/2026): ba skill (kể cả skill này) có `Vi du: …` trong description trần — `: ` là cú pháp mapping nên parser YAML từ chối; theo tài liệu `claude plugin validate`, skill khi đó nạp với metadata rỗng. `claude plugin validate` bắt được khi đóng gói plugin. Mặc định bọc `description` trong ngoặc kép (xem mẫu ở "Biến thể theo MÔI TRƯỜNG ĐÍCH").
+1. **Skill summary** — purpose, pattern, type, structure (single file or folder).
+2. **Full SKILL.md content** — in a code block; if it is a folder, also list the `references/` / `scripts/` / `assets/` files.
+3. **Deployment guide** — concrete steps for the target environment.
+4. **Test results** — 3 positive + 3 negative cases.
+5. **Diff Check** — confirm no original content was lost (if this is an upgrade/rewrite).
+6. **Gotchas handled** — if this is an upgrade.
+7. **Version** — the version in the YAML.
+
+---
+
+## Deployment guide
+
+**Folder skill (Claude Code / agent / API):**
+1. Create the folder `skill-name-kebab-case/`.
+2. Put `SKILL.md` at the root, plus `scripts/`, `references/`, `assets/` if any.
+3. Install the skill the way the environment expects (skills directory folder or a `.skill` package).
+4. Trigger 1 positive prompt to confirm activation.
+
+**Single-file skill (UI editor, paste directly):**
+1. Go to Settings → Skills → click `+`.
+2. Set the name to match `name` in the YAML.
+3. Paste the whole SKILL.md → Save.
+4. Trigger 1 positive prompt.
+
+**Check after deploying:** does not activate → inspect the description (still has diacritics? too short? missing the negative blocker?). Script/reference does not run → check the relative paths inside the folder.
+
+---
+
+## Gotchas (real ones from deployments)
+
+1. **LLMs compress/truncate when rewriting** — the most dangerous gotcha, especially with weaker models. When told to "rewrite full", a model tends to summarize and drop tables/schemas/values. Always run the 3-step anti-compression process (inventory → constrained rewrite → diff check) and include the self-binding instruction "do not summarize; if too long, split into references instead of deleting".
+2. **A multi-line description must use the folded scalar** `>-` in YAML. Without it the YAML breaks or the description gets cut.
+3. **No diacritics at all in the YAML frontmatter** — this applies only to YAML fields. Accented letters and tone marks (for example Vietnamese ă â ê ô ơ ư đ) break parsing/activation. The markdown body can use any language with full diacritics as normal.
+4. **No angle brackets in the description** — they are easily mistaken for tags and break the frontmatter.
+5. **No unescaped double quotes inside the description string** — they cause YAML parse errors.
+6. **A skill is a folder, not necessarily 1 file** — do not cram everything into SKILL.md. Split long documentation into `references/` (loaded dynamically) and repetitive logic into `scripts/` (runs offline, costs no context). Use a single file only when the skill is truly short.
+7. **The SKILL.md body should still stay under 500 lines** even with a folder — that is the limit for Progressive Disclosure level 2; offload the excess to references with clear pointers.
+8. **Pointers to references must be explicit** — say clearly "read file X when situation Y happens", otherwise the AI will not know when to load it.
+9. **An upgrade must keep the old `name`**, only bump `version`. Renaming to `-v2` creates a duplicate skill and causes over-triggering.
+10. **A skill that is too simple (1 step) will not activate** — Claude handles 1-step tasks on its own. Package only multi-step / specialized workflows.
+11. **Patchwork is a source of accumulated errors** — always rewrite in full when there are 2 or more problems (but the rewrite must preserve content, see gotcha #1).
+12. **5-field frontmatter is rejected by Agent Skills targets** (12/09/2026): three skills written with the 5-field template all failed validation when submitted to a strictly validating skill registry because of `version`/`pattern`/`type` and the folded `>-` `description` — reduce them to 2 one-line fields before submitting (see "Variants by TARGET ENVIRONMENT"). Gotcha #2 (folded `>-`) only applies to 5-field targets; on 2-field targets, `>-` is an error.
+13. **A one-line `description` without double quotes breaks YAML** (17/11/2026): three skills (including this one) had `Vi du: …` (Vietnamese for "Example: …") in a bare description — `: ` is mapping syntax, so the YAML parser rejects it; according to the `claude plugin validate` documentation, the skill then loads with empty metadata. `claude plugin validate` catches it when packaging a plugin. Wrap `description` in double quotes by default (see the template under "Variants by TARGET ENVIRONMENT").
 
 ---
 
 ## Test cases
 
-**Positive (phải kích hoạt):**
-1. "Viết cho mình một skill tự động lưu link vào Notion wiki." → kích hoạt, chạy quy trình 8 bước viết mới.
-2. "Nâng cấp skill x-post-optimizer lên version mới, fix lỗi không trigger." → kích hoạt, chạy quy trình nâng cấp 8 bước (rewrite full + diff check).
-3. "Review giúp SKILL.md này có đạt chuẩn không, có bị mất nội dung khi rewrite không?" → kích hoạt, chấm Checklist 14 + Diff Check.
+**Positive (must activate):**
+1. "Write me a skill that automatically saves links to my Notion wiki." → activates, runs the 8-step new-skill process.
+2. "Upgrade the x-post-optimizer skill to a new version and fix it so it triggers properly." → activates, runs the 8-step upgrade process (rewrite full + diff check).
+3. "Review whether this SKILL.md meets the standard and whether it lost content during the rewrite." → activates, scores the 14-item Checklist + Diff Check.
 
-**Negative (không kích hoạt):**
-1. "Skill trong game RPG là gì vậy?" → không kích hoạt (hỏi kiến thức chung).
-2. "Giải thích khái niệm AI agent cho mình nghe." → không kích hoạt (khái niệm chung).
-3. "Viết giúp mình một bài blog về AI." → không kích hoạt (nội dung khác, không phải skill file).
+**Negative (must not activate):**
+1. "What is a skill in an RPG game?" → does not activate (general knowledge question).
+2. "Explain the concept of an AI agent to me." → does not activate (general concept).
+3. "Write me a blog post about AI." → does not activate (other content, not a skill file).
 
 ---
 
-**Phiên bản:** v2.3.1 — 17/11/2026: bọc description của chính skill trong ngoặc kép (bản trần có `Vi du: …` là YAML hỏng); mẫu frontmatter 2 trường bọc ngoặc kép kèm luật scalar YAML; gotcha #13. v2.3.0 — 12/09/2026: thêm mục "Biến thể theo MÔI TRƯỜNG ĐÍCH" (đích Agent Skills chỉ nhận 2 trường name + description một dòng; gate chặn path ổ đĩa, credential, link gãy, script không UTF-8; review bác cú pháp sandbox claude.ai) + gotcha #12; sửa dòng cấu trúc skill. v2.2.1 — chỉ đổi đóng gói. v2.2.0 — Thêm Quy tắc tối thượng "Bảo toàn nội dung khi rewrite" (restructure khác compress, quy trình 3 bước chống nén kiểm kê/ràng buộc/diff), checklist #14 Diff Check, gotcha #1 về LLM nén/cắt xén, bổ sung loại lỗi Content-loss.
+**Version history:** v2.4.0 — 17/11/2026: English edition of v2.3.1 — full translation of the skill; the description is now in English; Vietnamese-specific rules generalized for international users (plain ASCII instead of "no Vietnamese diacritics", trigger phrases in every language users write in, English example description and test cases); added "respond in the language the user writes in" after the activation sentence; added `Example: …` next to `Vi du: …` as an English sample of the `: ` parse error; non-Latin-script languages use romanized or English trigger phrases; clarified that "Protocol v2.2" is the process name, not the release number. v2.3.1 — 17/11/2026: wrapped this skill's own description in double quotes (the bare version containing `Vi du: …` was broken YAML); the 2-field frontmatter template now uses double quotes, with the YAML scalar rules; gotcha #13. v2.3.0 — 12/09/2026: added the "Variants by TARGET ENVIRONMENT" section (Agent Skills targets accept only the 2 fields name + description on one line; gates block drive paths, credentials, broken links, non-UTF-8 scripts; review rejects claude.ai sandbox syntax) + gotcha #12; fixed the skill-structure line. v2.2.1 — packaging change only. v2.2.0 — Added the Supreme rule "Preserve content when rewriting" (restructure is not compress, 3-step anti-compression process inventory/constraint/diff), checklist #14 Diff Check, gotcha #1 about LLM compression/truncation, added the Content-loss failure type.
